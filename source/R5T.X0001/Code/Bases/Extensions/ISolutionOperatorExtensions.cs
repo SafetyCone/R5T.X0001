@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 using R5T.D0078;
 using R5T.D0079;
+using R5T.T0106;
 using R5T.T0113;
 using R5T.T0114;
 
@@ -29,7 +30,8 @@ namespace System
         public static async Task CreateSolutionInExistingRepository(this ISolutionOperator _,
             string repositoryDirectoryPath,
             string solutionName,
-            IVisualStudioSolutionFileOperator visualStudioSolutionFileOperator)
+            IVisualStudioSolutionFileOperator visualStudioSolutionFileOperator,
+            Func<SolutionFileContext, Task> solutionFileContextAction = default)
         {
             await Instances.RepositoryOperator.InRepositoryContext(
                 repositoryDirectoryPath,
@@ -42,7 +44,8 @@ namespace System
                     // Just create the solution with no modification.
                     await Instances.SolutionGenerator.CreateSolution(
                         solutionFileSpecification.FilePath,
-                        visualStudioSolutionFileOperator);
+                        visualStudioSolutionFileOperator,
+                        solutionFileContextAction);
                 });
         }
     }
